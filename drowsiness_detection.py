@@ -12,17 +12,17 @@ import time
 
 
 mixer.init()
-sound = mixer.Sound("sounds/alert.wav")
+sound = mixer.Sound("Drowsiness_Detector/sounds/alert.wav")
 
-face = cv2.CascadeClassifier('haarcascade files/haarcascade_frontalface_alt.xml')
-leye = cv2.CascadeClassifier('haarcascade files/haarcascade_lefteye_2splits.xml')
-reye = cv2.CascadeClassifier('haarcascade files/haarcascade_righteye_2splits.xml')
+face = cv2.CascadeClassifier('Drowsiness_Detector/haarcascade files/haarcascade_frontalface_alt.xml')
+leye = cv2.CascadeClassifier('Drowsiness_Detector/haarcascade files/haarcascade_lefteye_2splits.xml')
+reye = cv2.CascadeClassifier('Drowsiness_Detector/haarcascade files/haarcascade_righteye_2splits.xml')
 
 lbl=['Close','Open']
 
-model = load_model('models/cnnCat2.h5')
+model = load_model('Drowsiness_Detector/models/cnnCat2.h5')
 path = os.getcwd()
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(0)   
 font = cv2.FONT_HERSHEY_COMPLEX_SMALL
 count=0
 score=0
@@ -37,7 +37,7 @@ class DrowsinessDetector:
         self.master = master
         self.master.title("Drowsiness Detector")
         self.master.resizable(False, False)
-        self.sound = mixer.Sound('sounds/alert.wav')
+        self.sound = mixer.Sound('Drowsiness_Detector/sounds/alert.wav')
         self.video_capture = cv2.VideoCapture(0)
         self.image = None
         self.is_running = False
@@ -168,18 +168,20 @@ class DrowsinessDetector:
             img = cv2.resize(self.image, (224, 224))
             img = np.expand_dims(img, axis=0)
             img = img/255.0
-            model = load_model('models/cnnCat2.h5')    ##
+            model = load_model('Drowsiness_Detector/models/cnnCat2.h5')    ##
             prediction = model.predict(img)
             if prediction > 0.5:
                 self.status_label.config(text="Status: Alert")
                 if not self.sound_played and self.eyes_open:  # Play the sound only if it hasn't already been played and the eyes were previously open
-                    self.sound.play()
-                    pygame.time.wait(10) #instead of pygame.time.wait(2500)
-                    sound.play(loops=-1)
-                    self.sound_played = True
                     self.eyes_open = False
-                    print("sound played successfully")
-            else:
+                    pygame.mixer.music.load(sound)
+                    pygame.mixer.music.play()
+                    start_time = time.time()
+                    while not self.eyes_open and time.time() - start_time < 5:
+                        continue
+                    pygame.mixer.music.stop()
+                    self.eyes_open = True
+            else: 
                 self.status_label.config(text="Status: Awake")
                 self.sound_played = False
                 self.eyes_open = True  # Set eyes_open to True when the eyes are open
