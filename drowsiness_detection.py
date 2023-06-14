@@ -113,6 +113,8 @@ class DrowsinessDetector:
                 break
 
             for (x,y,w,h) in left_eye:
+                global closed_frames
+                closed_frames = 0
                 l_eye=frame[y:y+h,x:x+w]
                 count=count+1
                 l_eye = cv2.cvtColor(l_eye,cv2.COLOR_BGR2GRAY)  
@@ -130,16 +132,18 @@ class DrowsinessDetector:
 
                 if(rpred[0]==0 and lpred[0]==0):
                     score=score+1
+                    closed_frames += 1
                     cv2.putText(frame,"Closed",(10,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)
                     self.sound.play()   #
                 else:
                     score=score-1
+                    closed_frames = 0
                     cv2.putText(frame,"Open",(10,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)
 
                 if(score<0):
                     score=0   
                 cv2.putText(frame,'Score:'+str(score),(100,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)
-                if(score>15):
+                if(score>15) and closed_frames > 40:
                     #person is feeling sleepy so we beep the alarm
                     cv2.imwrite(os.path.join(path,'image.jpg'),frame)
                     try:
@@ -172,7 +176,7 @@ class DrowsinessDetector:
             prediction = model.predict(img)
             if prediction > 0.5:
                 self.status_label.config(text="Status: Alert")
-                if not self.sound_played and self.eyes_open:  # Play the sound only if it hasn't already been played and the eyes were previously open
+                if not self.sound_played and self.eyes_open and closed_frames > 40:  # Play the sound only if it hasn't already been played and the eyes were previously open
                     self.eyes_open = False
                     pygame.mixer.music.load(sound)
                     pygame.mixer.music.play()
