@@ -76,6 +76,11 @@ class DrowsinessDetector:
         frame = None
         count = 0
         score = 0
+        
+        thicc=2  #
+        rpred=[99] #
+        lpred=[99]  #
+        
         if self.is_running==True:
             ret, frame = self.video_capture.read()
             if ret:
@@ -126,6 +131,7 @@ class DrowsinessDetector:
                 if(rpred[0]==0 and lpred[0]==0):
                     score=score+1
                     cv2.putText(frame,"Closed",(10,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)
+                    self.sound.play()   #
                 else:
                     score=score-1
                     cv2.putText(frame,"Open",(10,height-20), font, 1,(255,255,255),1,cv2.LINE_AA)
@@ -162,12 +168,13 @@ class DrowsinessDetector:
             img = cv2.resize(self.image, (224, 224))
             img = np.expand_dims(img, axis=0)
             img = img/255.0
+            model = load_model('models/cnnCat2.h5')    ##
             prediction = model.predict(img)
             if prediction > 0.5:
                 self.status_label.config(text="Status: Alert")
                 if not self.sound_played and self.eyes_open:  # Play the sound only if it hasn't already been played and the eyes were previously open
                     self.sound.play()
-                    pygame.time.wait(2500)
+                    pygame.time.wait(10) #instead of pygame.time.wait(2500)
                     sound.play(loops=-1)
                     self.sound_played = True
                     self.eyes_open = False
