@@ -1,0 +1,1 @@
+closed_frames_count
