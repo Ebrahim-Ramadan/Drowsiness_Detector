@@ -9,6 +9,7 @@ import numpy as np
 import pygame
 from pygame import mixer
 import time
+import matplotlib.pyplot as plt
 
 
 mixer.init()
@@ -64,6 +65,10 @@ class DrowsinessDetector:
         self.image_label.grid(row=4, column=0, columnspan=2, padx=10, pady=10)
 
         self.update_canvas()
+        self.tp = 0
+        self.fp = 0
+        self.tn = 0
+        self.fn = 0
 
     def start_detection(self):
         self.video_capture = cv2.VideoCapture(0)
@@ -77,6 +82,7 @@ class DrowsinessDetector:
             self.video_capture.release()
         self.canvas.delete("all")
         self.status_label.config(text="Status: Idle")
+        self.data_viz()
 
     def update_canvas(self):
         frame = None
@@ -136,21 +142,24 @@ class DrowsinessDetector:
 
                 if (lpred[0] == 1):
                     lbl = 'Open'
+                    self.fn += 1
                 if (lpred[0] == 0):
                     lbl = 'Closed'
+                    self.tp += 1
 
                 if (rpred[0] == 0 and lpred[0] == 0):
                     score = score + 1
+                    self.fp += 1
                     self.closed_frames_count += 1
                     cv2.putText(frame, "Closed", (10, height - 20),
                                 font, 1, (255, 255, 255), 1, cv2.LINE_AA)
                     self.sound.play()  #
                 else:
                     score = score - 1
+                    self.tn += 1
                     self.closed_frames_count = 0
                     cv2.putText(frame, "Open", (10, height - 20),
                                 font, 1, (255, 255, 255), 1, cv2.LINE_AA)
-
                 if (score < 0):
                     score = 0
                 cv2.putText(frame, 'Score:' + str(score), (100, height - 20),
@@ -203,6 +212,27 @@ class DrowsinessDetector:
                 self.eyes_open = True  # Set eyes_open to True when the eyes are open
         else:
             messagebox.showerror("Error", "No frame available for detection.")
+
+
+# accuracy visualization using plt
+
+    def data_viz(self):
+        accuracy = (self.tp + self.tn) / \
+            (self.tp + self.fp + self.tn + self.fn)
+        precision = self.tp / (self.tp + self.fp)
+        recall = self.tp / (self.tp + self.fn)
+        specificity = self.tn / (self.tn + self.fp)
+        f1_score = 2 * (precision * recall) / (precision + recall)
+
+        # Plot the accuracy measures
+        labels = ['Accuracy', 'Precision', 'Recall', 'Specificity', 'F1 Score']
+        values = [accuracy, precision, recall, specificity, f1_score]
+
+        plt.bar(labels, values)
+        plt.xlabel('Measures')
+        plt.ylabel('Values')
+        plt.title('Accuracy Measures')
+        plt.show()
 
 
 root = tk.Tk()
