@@ -27,5 +27,14 @@ Drowsy driving is a serious safety concern, as it can lead to accidents due to d
 ## Installation
 
 1. Clone the repository:
-   ```https://github.com/Ebrahim-Ramadan/Drowsiness_Detector.git
+   ```https://github.com/Ebrahim-Ramadan/Drowsiness_Detector.git```
+You can configure the Drowsiness Detector by modifying the config.json file. This file allows you to adjust the following parameters:
+
+## Configuration
+
+You can configure the Drowsiness Detector by modifying the config.json file. This file allows you to adjust the following parameters:
+
+- eye_aspect_ratio_threshold: Threshold for detecting closed eyes.
+- ear_consecutive_frames: Number of consecutive frames for which the eye aspect ratio can be below the threshold before triggering an alert.
+- alarm_sound_path: Path to the sound file that will be played when drowsiness is detected.
   
