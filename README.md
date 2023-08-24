@@ -27,6 +27,5 @@ Drowsy driving is a serious safety concern, as it can lead to accidents due to d
 ## Installation
 
 1. Clone the repository:
-   ```bash
-  https://github.com/Ebrahim-Ramadan/Drowsiness_Detector.git
+   ```https://github.com/Ebrahim-Ramadan/Drowsiness_Detector.git
   
