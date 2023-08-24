@@ -27,7 +27,7 @@ Drowsy driving is a serious safety concern, as it can lead to accidents due to d
 ## Installation
 
 1. Clone the repository:
-   ```https://github.com/Ebrahim-Ramadan/Drowsiness_Detector.git```
+   ```git clone https://github.com/Ebrahim-Ramadan/Drowsiness_Detector.git```
 You can configure the Drowsiness Detector by modifying the config.json file. This file allows you to adjust the following parameters:
 
 ## Configuration
@@ -38,3 +38,15 @@ You can configure the Drowsiness Detector by modifying the config.json file. Thi
 - ear_consecutive_frames: Number of consecutive frames for which the eye aspect ratio can be below the threshold before triggering an alert.
 - alarm_sound_path: Path to the sound file that will be played when drowsiness is detected.
   
+## Contributing
+
+Contributions are welcome! If you find any issues or want to enhance the project, feel free to open pull requests. Please ensure that you follow the project's coding standards and best practices.
+
+- Fork the repository.
+- Create a new branch for your feature or bug fix: git checkout -b feature-name.
+- Make your changes and commit them with descriptive commit messages.
+- Push your changes to your fork: git push origin feature-name.
+- Open a pull request explaining your changes and why they should be merged.
+
+
+Thank you for using the Drowsiness Detector project! If you have any questions, concerns, or suggestions, please contact us at ramadanebrahim791@gmail.com. Your feedback is highly appreciated.
