@@ -14,7 +14,7 @@ Welcome to the documentation for the **Drowsiness Detector** Python project. Thi
 
 ## Introduction
 
-Drowsy driving is a serious safety concern, as it can lead to accidents due to delayed reaction times and decreased attention. The Drowsiness Detector project aims to address this issue by providing a tool that can monitor a person's eyes using a webcam and raise alerts if signs of drowsiness are detected.
+Drowsy driving is a serious safety concern, as it can lead to accidents due to delayed reaction times and decreased attention. The Drowsiness Detector project aims to address this issue by providing a tool that can monitor a person's eyes using a webcam and raise alerts if signs of drowsiness are detected. (very accurate regarding how closed the eyes can be)
 
 ## Features
 
